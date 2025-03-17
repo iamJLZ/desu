@@ -1,0 +1,29 @@
+alpha = _{'a'..'z'|'A'..'Z'}
+number_d = {"0"|(("-"|"+")?~ASCII_NONZERO_DIGIT~ASCII_DIGIT*~("E"~("-"|"+")?~ASCII_NONZERO_DIGIT~ASCII_DIGIT*)?)}
+number_b = {"0B"~ASCII_BIN_DIGIT+}
+number_o = {"0O"~ASCII_OCT_DIGIT+}
+number_h = {"0X"~ASCII_HEX_DIGIT+}
+number = {number_d|number_b|number_h|number_o}
+string = {"\""~((!("\""|"\\")~ANY)|("\\"~ANY))*~"\""}
+Constval = {"{"~(string|number)~"}"}
+
+// word
+// verb: -u
+// noun: -n
+// adj:  -i
+
+// sentence
+Sentence = {Word~(" "~Word)*~"."}
+Word = {Constval|CompWord}
+CompWord = {}
+
+// dict
+// > <name>:
+Entry = {">"~(ASCII_ALPHA+)~":"~"<"~property~(","~property)*~">\n"~rule~"\""~story~"\""}
+property = {ASCII_ALPHA+} // basic property: verb, noun, suffix, conj, prep, property
+// base: verb, noun
+// suffix: (base/suffix)~suffix
+// conj: (base/suffix)~conj
+// prep: (base/suffix)~prep~base
+
+//story&scene
